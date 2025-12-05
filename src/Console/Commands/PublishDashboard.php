@@ -25,38 +25,59 @@ class PublishDashboard extends Command
      */
     public function handle()
     {
+        // Step 1: Publish migrations first
+        $this->info('Publishing migrations...');
+        exec('php artisan vendor:publish --tag=customize-dashboard-widget-migrations --force', $output, $return_var);
+        $this->info(implode("\n", $output));
+        if ($return_var === 0) {
+            $this->info('✓ Migrations published successfully');
+        } else {
+            $this->error('✗ Failed to publish migrations');
+            $this->error(implode("\n", $output));
+            return Command::FAILURE;
+        }
+
+        // Step 2: Run migrations
+        $this->info('Running migrations...');
         exec('php artisan migrate', $output, $return_var);
         $this->info(implode("\n", $output));
         if ($return_var === 0) {
-            $this->info('Migrations ran successfully');
+            $this->info('✓ Migrations ran successfully');
         } else {
-            $this->error('Failed to run migrations');
+            $this->error('✗ Failed to run migrations');
             $this->error(implode("\n", $output));
+            return Command::FAILURE;
         }
 
-        exec('php artisan vendor:publish --tag=customize-dashboard-widget-dashboard', $output, $return_var);
+        // Step 3: Publish Dashboard stub
+        $this->info('Publishing Dashboard stub...');
+        exec('php artisan vendor:publish --tag=customize-dashboard-widget-dashboard --force', $output, $return_var);
         $this->info(implode("\n", $output));
         if ($return_var === 0) {
-            $this->info('Dashboard published successfully');
+            $this->info('✓ Dashboard published successfully');
         } else {
-            $this->error('Failed to publish dashboard');
+            $this->error('✗ Failed to publish dashboard');
             $this->error(implode("\n", $output));
+            return Command::FAILURE;
         }
 
+        // Step 4: Update AdminPanelProvider
+        $this->info('Updating AdminPanelProvider...');
+        $adminPanelPath = app_path('Providers/Filament/AdminPanelProvider.php');
+        
+        if (!file_exists($adminPanelPath)) {
+            $this->error('✗ AdminPanelProvider.php not found at: ' . $adminPanelPath);
+            return Command::FAILURE;
+        }
 
-
-        $content = file_get_contents(app_path('Providers/Filament/AdminPanelProvider.php'));
-        $content = str_replace('use Filament\Pages\Dashboard;', 'use App\Filament\Pages\Dashboard;
+        $content = file_get_contents($adminPanelPath);
+        
+        // Update the Dashboard import
+        if (strpos($content, 'use App\Filament\Pages\Dashboard;') === false) {
+            $content = str_replace('use Filament\Pages\Dashboard;', 'use App\Filament\Pages\Dashboard;
 use Shreejan\CustomizeDashboardWidget\CustomizeDashboardWidgetPlugin;', $content);
-        file_put_contents(app_path('Providers/Filament/AdminPanelProvider.php'), $content);
-        $this->info('AdminPanelProvider updated successfully');
-
-
-        $pluginData= file_get_contents(app_path('Providers/Filament/AdminPanelProvider.php'));
-        if(strpos($pluginData, 'CustomizeDashboardWidgetPlugin::make()') === false) {
-            $pluginData = str_replace('->plugins([', '->plugins([
-                CustomizeDashboardWidgetPlugin::make(),', $pluginData);
-            file_put_contents(app_path('Providers/Filament/AdminPanelProvider.php'), $pluginData);
+            file_put_contents($adminPanelPath, $content);
+            $this->info('✓ Dashboard import updated');
         }
     }
 }
