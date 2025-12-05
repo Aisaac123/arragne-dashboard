@@ -14,7 +14,6 @@ class Dashboard extends BaseDashboard
 
     public function mount(): void
     {
-        parent::mount();
         
         // Initialize customizable dashboard functionality
         $this->mountHasCustomizableDashboard();

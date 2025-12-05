@@ -60,11 +60,11 @@
             }
         }"
     >
-        <div class="flex justify-between mb-4">
-            <div class="text-left">
+        <div class="flex justify-between items-center mb-4">
+            <div>
                 <h2 class="text-2xl font-bold">{{ $this->getTitle() ?: __('Dashboard') }}</h2>
             </div>
-            <div class="text-right space-x-1">
+            <div class="flex items-center gap-2 ml-auto">
                 <x-filament::button
                     color="primary"
                     x-show="!editable"
