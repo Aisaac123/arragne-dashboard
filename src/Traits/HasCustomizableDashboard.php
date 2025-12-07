@@ -103,13 +103,59 @@ trait HasCustomizableDashboard
 
     /**
      * Get default grid columns configuration.
+     * Returns 2 columns (Filament's default).
      */
     public function getColumns(): int|array
     {
-        return config('customize-dashboard-widget.default_grid_columns', [
-            'md' => 2,
-            'xl' => 12,
-        ]);
+        return 2;
+    }
+
+    /**
+     * Get the column span for a widget instance.
+     * Handles 'full', numeric values, and responsive arrays.
+     * Matches Filament's default behavior for widget column spans.
+     *
+     * @param  object  $widgetInstance
+     * @param  int  $gridColumns
+     * @return int
+     */
+    public function getWidgetColumnSpan(object $widgetInstance, int $gridColumns): int
+    {
+        if (! method_exists($widgetInstance, 'getColumnSpan')) {
+            return 1;
+        }
+
+        try {
+            $columnSpan = $widgetInstance->getColumnSpan();
+
+            // Handle responsive array: ['sm' => 1, 'md' => 2, 'xl' => 'full']
+            if (is_array($columnSpan)) {
+                // Priority: md > default > first value > 1
+                $mdSpan = $columnSpan['md'] ?? $columnSpan['default'] ?? reset($columnSpan) ?? 1;
+                
+                if ($mdSpan === 'full') {
+                    return $gridColumns;
+                }
+                
+                return is_numeric($mdSpan) && $mdSpan > 0 ? min((int) $mdSpan, $gridColumns) : 1;
+            }
+
+            // Handle string 'full'
+            if ($columnSpan === 'full') {
+                return $gridColumns;
+            }
+
+            // Handle numeric value
+            if (is_numeric($columnSpan) && $columnSpan > 0) {
+                return min((int) $columnSpan, $gridColumns);
+            }
+
+            // Fallback to default
+            return 1;
+        } catch (\Throwable $e) {
+            // If anything goes wrong, return safe default
+            return 1;
+        }
     }
 
     /**

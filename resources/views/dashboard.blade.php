@@ -111,36 +111,40 @@
             </div>
         </div>
 
+        @php
+            $columns = $this->getColumns();
+            $gridColumns = is_array($columns) ? ($columns['md'] ?? $columns['default'] ?? 2) : (int) $columns;
+            $gridColumns = max(1, min(12, $gridColumns)); // Ensure valid range (1-12)
+        @endphp
+
+        <style>
+            #sortable-container {
+                grid-template-columns: repeat(1, minmax(0, 1fr));
+            }
+            @media (min-width: 768px) {
+                #sortable-container {
+                    grid-template-columns: repeat({{ $gridColumns }}, minmax(0, 1fr));
+                }
+            }
+        </style>
+
         <div
             id="sortable-container"
-            class="grid grid-cols-1 md:grid-cols-{{ config('customize-dashboard-widget.default_grid_columns.md', 2) }} gap-4"
+            class="grid gap-4"
             x-bind:data-sortable="editable ? 'true' : 'false'"
         >
             @foreach ($this->currentWidgets as $widget)
                 @if ($widget['visible'])
                     @php
-                        $widgetInstance = resolve($widget['name']);
-                        
-                        // Priority 1: Use custom getWidgetWidthClass() if available
-                        if (method_exists($widgetInstance, 'getWidgetWidthClass')) {
-                            $widthClass = $widgetInstance->getWidgetWidthClass();
-                        }
-                        // Priority 2: Convert Filament's getColumnSpan() to Tailwind classes
-                        elseif (method_exists($widgetInstance, 'getColumnSpan')) {
-                            $columnSpan = $widgetInstance->getColumnSpan();
-                            $widthClass = is_array($columnSpan) 
-                                ? collect($columnSpan)->map(fn($span, $breakpoint) => 
-                                    $span === 'full' 
-                                        ? "{$breakpoint}:col-span-full" 
-                                        : "{$breakpoint}:col-span-{$span}"
-                                )->implode(' ')
-                                : "md:col-span-{$columnSpan}";
-                        }
-                        // Priority 3: Default fallback
-                        else {
-                            $widthClass = 'md:col-span-1';
+                        try {
+                            $widgetInstance = resolve($widget['name']);
+                            $columnSpan = $this->getWidgetColumnSpan($widgetInstance, $gridColumns);
+                        } catch (\Throwable $e) {
+                            // Fallback if widget can't be resolved
+                            $columnSpan = 1;
                         }
                     @endphp
+
                     <div
                         x-sortable-item="{{ $widget['name'] }}"
                         x-sortable-handle="drag-handle"
@@ -152,13 +156,14 @@
                             }
                         }"
                         x-on:dragend="handleWidgetDropEvent(event)"
-                        class="{{ $widthClass }} relative fi-wi"
+                        class="relative"
+                        style="grid-column: span {{ $columnSpan }} / span {{ $columnSpan }};"
                     >
                         <div x-bind:class="{'select-none relative p-2 pointer-events-none': editable}">
                             @livewire($widget['name'], [], key($widget['name'] . '-'. auth()->id().time()))
                         </div>
 
-                        <span class="drag-handle" x-show="editable"></span>
+                        <span class="drag-handle cursor-grab absolute top-0 left-0 z-10 hover:ring-2 dark:ring-gray-500 ring-primary-500 dark:bg-white/10 bg-white/40 transition-all duration-450 ease-in-out rounded-xl w-full h-full" x-show="editable"></span>
                     </div>
                 @endif
             @endforeach
