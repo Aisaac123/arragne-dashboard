@@ -1,0 +1,25 @@
+{
+    "name": "dashboard-customization",
+    "version": "1.0.0",
+    "description": "Package that allows user to customize their dashboard widget according to user preference.",
+    "homepage": "https://github.com/shreejanpandit/dashboard-customization#readme",
+    "bugs": {
+        "url": "https://github.com/shreejanpandit/dashboard-customization/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/shreejanpandit/dashboard-customization.git"
+    },
+    "license": "ISC",
+    "author": "",
+    "type": "commonjs",
+    "main": "index.js",
+    "scripts": {
+        "build": "npx @tailwindcss/cli -i ./resources/css/dashboard-customization.css -o ./resources/dist/css/dashboard-customization.css --build --minify && php ../../../artisan filament:assets",
+        "dev": "npx @tailwindcss/cli -i ./resources/css/dashboard-customization.css -o ./resources/dist/css/dashboard-customization.css --watch --minify"
+    },
+    "dependencies": {
+        "@tailwindcss/cli": "^4.1.17",
+        "tailwindcss": "^4.1.17"
+    }
+}
