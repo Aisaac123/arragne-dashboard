@@ -90,6 +90,9 @@ Edit `config/customize-dashboard-widget.php` to customize:
 - **Grid columns**: Default number of columns for the dashboard grid
 - **User model**: Customize the user model if needed
 - **Permission checks**: Add custom permission logic for widgets
+- **Customize Dashboard Button**: 
+  - `customize_dashboard_title`: The title text for the customize dashboard button (default: 'Customize My Dashboard')
+  - `customize_dashboard_button_color`: The color of the customize dashboard button. Colors can be added in `AdminPanelProvider.php` -> `colors` array (default: 'primary')
 
 ## Requirements
 

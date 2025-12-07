@@ -66,12 +66,12 @@
             </div>
             <div class="flex items-center gap-2 ml-auto">
                 <x-filament::button
-                    color="primary"
+                    color="{{ config('customize-dashboard-widget.customize_dashboard_button_color', 'primary') }}"
                     x-show="!editable"
                     x-on:click="customizeDashboard()"
                     size="sm"
                 >
-                    {{ __('Customize My Dashboard') }}
+                    {{ config('customize-dashboard-widget.customize_dashboard_title', 'Customize My Dashboard') }}
                 </x-filament::button>
 
                 <x-filament::button
