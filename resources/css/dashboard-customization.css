@@ -2,36 +2,43 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 .available-widgets-section {
-    padding: 1.5rem;
-    background-color: rgb(255, 255, 255);
-    border: 1px solid rgb(214, 214, 214);
-    border-radius: 0.5rem;
-    margin-bottom: 1.5rem;
-}
+    @apply p-6 bg-white border border-gray-300 rounded-lg mb-6;
 
-.dark .available-widgets-section {
-    background-color: rgb(8, 8, 10);
-    border-color: rgb(55, 65, 81);
+    .dark & {
+        @apply bg-gray-800 border-gray-700;
+    }
 }
 
 .available-widgets-title {
-    color: rgb(5, 7, 12);
-    margin-bottom: 1rem;
-    display: block;
-}
+    @apply text-gray-900 mb-4 block;
 
-.dark .available-widgets-title {
-    color: rgb(243, 244, 246);
+    .dark & {
+        @apply text-gray-100;
+    }
 }
 
 .available-widgets-section input:checked~div {
-    background-color: rgb(59, 130, 246) !important;
+    @apply bg-blue-500;
 }
 
 .available-widgets-section input~div {
-    margin-right: 0.5rem;
+    @apply mr-2;
 }
 
 .dashboard-header {
-    margin-bottom: 1.5rem;
+    @apply mb-4;
+}
+
+.drag-handle {
+    @apply cursor-grab absolute top-0 left-0 z-[1] bg-white/40 transition-all ease-in-out rounded-xl w-full h-full;
+    transition-duration: 450ms;
+}
+
+.drag-handle:hover {
+    --tw-ring-shadow: var(--tw-ring-inset, 0 0 0 calc(2px + var(--tw-ring-offset-width, 0px)) var(--tw-ring-color, rgb(59 130 246 / 1)));
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+}
+
+.dark .drag-handle {
+    @apply bg-white/10;
 }

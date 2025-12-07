@@ -158,7 +158,7 @@
                             @livewire($widget['name'], [], key($widget['name'] . '-'. auth()->id().time()))
                         </div>
 
-                        <span class="drag-handle cursor-grab absolute top-0 left-0 z-1 hover:ring-2 dark:ring-gray-500 ring-primary-500 dark:bg-white/10 bg-white/40 transition-all duration-450 ease-in-out rounded-xl w-full h-full" x-show="editable"></span>
+                        <span class="drag-handle" x-show="editable"></span>
                     </div>
                 @endif
             @endforeach
