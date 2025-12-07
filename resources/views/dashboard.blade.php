@@ -1,29 +1,4 @@
 <x-filament::page>
-    <style>
-        .available-widgets-section {
-            padding: 1.5rem;
-            background-color: rgb(255, 255, 255);
-            border: 1px solid rgb(214, 214, 214);
-            border-radius: 0.5rem;
-            margin-bottom: 1.5rem;
-        }
-        .dark .available-widgets-section {
-            background-color: rgb(8, 8, 10);
-            border-color: rgb(55, 65, 81);
-        }
-        .available-widgets-title {
-            color: rgb(5, 7, 12);
-            margin-bottom: 1rem;
-            display: block;
-        }
-        .dark .available-widgets-title {
-            color: rgb(243, 244, 246);
-        }
-        .available-widgets-section input:checked ~ div {
-            background-color: rgb(59, 130, 246) !important;
-            margin-right: 0.5rem;
-        }
-    </style>
     <div
         x-data="{
             editable: false,
@@ -85,7 +60,7 @@
             }
         }"
     >
-        <div class="flex justify-between items-center" style="margin-bottom: 1.5rem;">
+        <div class="flex justify-between items-center dashboard-header">
             <div>
                 <h2 class="text-2xl font-bold">{{ $this->getTitle() ?: __('Dashboard') }}</h2>
             </div>
