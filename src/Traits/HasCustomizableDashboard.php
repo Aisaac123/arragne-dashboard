@@ -103,13 +103,35 @@ trait HasCustomizableDashboard
 
     /**
      * Get default grid columns configuration.
+     * Returns 2 columns (Filament's default).
      */
     public function getColumns(): int|array
     {
-        return config('customize-dashboard-widget.default_grid_columns', [
-            'md' => 2,
-            'xl' => 12,
-        ]);
+        return 2;
+    }
+
+    /**
+     * Get the column span for a widget instance.
+     * Handles 'full', numeric values, and responsive arrays.
+     *
+     * @param  object  $widgetInstance
+     * @param  int  $gridColumns
+     * @return int
+     */
+    public function getWidgetColumnSpan(object $widgetInstance, int $gridColumns): int
+    {
+        if (! method_exists($widgetInstance, 'getColumnSpan')) {
+            return 1;
+        }
+
+        $columnSpan = $widgetInstance->getColumnSpan();
+
+        if (is_array($columnSpan)) {
+            $mdSpan = $columnSpan['md'] ?? $columnSpan['default'] ?? 1;
+            return $mdSpan === 'full' ? $gridColumns : (is_numeric($mdSpan) ? $mdSpan : 1);
+        }
+
+        return $columnSpan === 'full' ? $gridColumns : (is_numeric($columnSpan) ? $columnSpan : 1);
     }
 
     /**
