@@ -113,6 +113,7 @@ trait HasCustomizableDashboard
     /**
      * Get the column span for a widget instance.
      * Handles 'full', numeric values, and responsive arrays.
+     * Matches Filament's default behavior for widget column spans.
      *
      * @param  object  $widgetInstance
      * @param  int  $gridColumns
@@ -124,14 +125,37 @@ trait HasCustomizableDashboard
             return 1;
         }
 
-        $columnSpan = $widgetInstance->getColumnSpan();
+        try {
+            $columnSpan = $widgetInstance->getColumnSpan();
 
-        if (is_array($columnSpan)) {
-            $mdSpan = $columnSpan['md'] ?? $columnSpan['default'] ?? 1;
-            return $mdSpan === 'full' ? $gridColumns : (is_numeric($mdSpan) ? $mdSpan : 1);
+            // Handle responsive array: ['sm' => 1, 'md' => 2, 'xl' => 'full']
+            if (is_array($columnSpan)) {
+                // Priority: md > default > first value > 1
+                $mdSpan = $columnSpan['md'] ?? $columnSpan['default'] ?? reset($columnSpan) ?? 1;
+                
+                if ($mdSpan === 'full') {
+                    return $gridColumns;
+                }
+                
+                return is_numeric($mdSpan) && $mdSpan > 0 ? min((int) $mdSpan, $gridColumns) : 1;
+            }
+
+            // Handle string 'full'
+            if ($columnSpan === 'full') {
+                return $gridColumns;
+            }
+
+            // Handle numeric value
+            if (is_numeric($columnSpan) && $columnSpan > 0) {
+                return min((int) $columnSpan, $gridColumns);
+            }
+
+            // Fallback to default
+            return 1;
+        } catch (\Throwable $e) {
+            // If anything goes wrong, return safe default
+            return 1;
         }
-
-        return $columnSpan === 'full' ? $gridColumns : (is_numeric($columnSpan) ? $columnSpan : 1);
     }
 
     /**

@@ -113,7 +113,8 @@
 
         @php
             $columns = $this->getColumns();
-            $gridColumns = is_array($columns) ? ($columns['md'] ?? $columns['default'] ?? 2) : $columns;
+            $gridColumns = is_array($columns) ? ($columns['md'] ?? $columns['default'] ?? 2) : (int) $columns;
+            $gridColumns = max(1, min(12, $gridColumns)); // Ensure valid range (1-12)
         @endphp
 
         <style>
@@ -135,8 +136,13 @@
             @foreach ($this->currentWidgets as $widget)
                 @if ($widget['visible'])
                     @php
-                        $widgetInstance = resolve($widget['name']);
-                        $columnSpan = $this->getWidgetColumnSpan($widgetInstance, $gridColumns);
+                        try {
+                            $widgetInstance = resolve($widget['name']);
+                            $columnSpan = $this->getWidgetColumnSpan($widgetInstance, $gridColumns);
+                        } catch (\Throwable $e) {
+                            // Fallback if widget can't be resolved
+                            $columnSpan = 1;
+                        }
                     @endphp
 
                     <div
