@@ -1,4 +1,29 @@
 <x-filament::page>
+    <style>
+        .available-widgets-section {
+            padding: 1.5rem;
+            background-color: rgb(255, 255, 255);
+            border: 1px solid rgb(214, 214, 214);
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .dark .available-widgets-section {
+            background-color: rgb(8, 8, 10);
+            border-color: rgb(55, 65, 81);
+        }
+        .available-widgets-title {
+            color: rgb(5, 7, 12);
+            margin-bottom: 1rem;
+            display: block;
+        }
+        .dark .available-widgets-title {
+            color: rgb(243, 244, 246);
+        }
+        .available-widgets-section input:checked ~ div {
+            background-color: rgb(59, 130, 246) !important;
+            margin-right: 0.5rem;
+        }
+    </style>
     <div
         x-data="{
             editable: false,
@@ -60,7 +85,7 @@
             }
         }"
     >
-        <div class="flex justify-between items-center mb-4">
+        <div class="flex justify-between items-center" style="margin-bottom: 1.5rem;">
             <div>
                 <h2 class="text-2xl font-bold">{{ $this->getTitle() ?: __('Dashboard') }}</h2>
             </div>
@@ -95,9 +120,9 @@
         </div>
 
         <div>
-            <div class="p-4 bg-white dark:bg-gray-800 mb-4 space-y-3 rounded" x-show="editable">
+            <div class="available-widgets-section space-y-3" x-show="editable">
               <div>
-                <span class="font-medium text-lg">{{ __('Available Widgets') }}</span>
+                <span class="available-widgets-title font-medium text-lg">{{ __('Available Widgets') }}</span>
               </div>
               <div class="grid grid-cols-4 gap-4">
                 @foreach ($this->permittedWidgets as $index => $widget)
