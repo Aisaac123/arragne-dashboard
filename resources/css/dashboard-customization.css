@@ -5,7 +5,7 @@
     @apply p-6 bg-white border border-gray-300 rounded-lg mb-6;
 
     .dark & {
-        @apply bg-gray-800 border-gray-700;
+        @apply bg-white/10 border-gray-700;
     }
 }
 
