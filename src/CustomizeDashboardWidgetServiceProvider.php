@@ -2,9 +2,10 @@
 
 namespace Shreejan\CustomizeDashboardWidget;
 
+use Filament\Support\Assets\Css;
 use Filament\Support\Facades\FilamentAsset;
 use Filament\Support\Assets\Js;
-use Shreejan\CustomizeDashboardWidget\Console\Commands\PublishDashboard;
+use Shreejan\CustomizeDashboardWidget\Console\Commands\InstallCustomizableDashboard;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -21,7 +22,7 @@ class CustomizeDashboardWidgetServiceProvider extends PackageServiceProvider
             ])
             ->hasConfigFile('customize-dashboard-widget')
             ->hasCommands([
-                PublishDashboard::class,
+                InstallCustomizableDashboard::class,
             ]);
     }
 
@@ -39,6 +40,7 @@ class CustomizeDashboardWidgetServiceProvider extends PackageServiceProvider
         FilamentAsset::register([
             Js::make('sortablejs', 'https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js')
                 ->loadedOnRequest(),
+            Css::make('dashboard-customization', __DIR__.'/../resources/dist/css/dashboard-customization.css')
         ], package: 'shreejan/customize-dashboard-widget');
     }
 }

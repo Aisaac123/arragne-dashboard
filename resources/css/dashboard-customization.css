@@ -1,0 +1,44 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+.available-widgets-section {
+    @apply p-6 bg-white border border-gray-300 rounded-lg mb-6;
+
+    .dark & {
+        @apply bg-white/10 border-gray-700;
+    }
+}
+
+.available-widgets-title {
+    @apply text-gray-900 mb-4 block;
+
+    .dark & {
+        @apply text-gray-100;
+    }
+}
+
+.available-widgets-section input:checked~div {
+    @apply bg-blue-500;
+}
+
+.available-widgets-section input~div {
+    @apply mr-2;
+}
+
+.dashboard-header {
+    @apply mb-4;
+}
+
+.drag-handle {
+    @apply cursor-grab absolute top-0 left-0 z-[1] bg-white/40 transition-all ease-in-out rounded-xl w-full h-full;
+    transition-duration: 450ms;
+}
+
+.drag-handle:hover {
+    --tw-ring-shadow: var(--tw-ring-inset, 0 0 0 calc(2px + var(--tw-ring-offset-width, 0px)) var(--tw-ring-color, rgb(59 130 246 / 1)));
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+}
+
+.dark .drag-handle {
+    @apply bg-white/10;
+}

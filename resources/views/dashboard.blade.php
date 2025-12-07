@@ -60,18 +60,18 @@
             }
         }"
     >
-        <div class="flex justify-between items-center mb-4">
+        <div class="flex justify-between items-center dashboard-header">
             <div>
                 <h2 class="text-2xl font-bold">{{ $this->getTitle() ?: __('Dashboard') }}</h2>
             </div>
             <div class="flex items-center gap-2 ml-auto">
                 <x-filament::button
-                    color="primary"
+                    color="{{ config('customize-dashboard-widget.customize_dashboard_button_color', 'primary') }}"
                     x-show="!editable"
                     x-on:click="customizeDashboard()"
                     size="sm"
                 >
-                    {{ __('Customize My Dashboard') }}
+                    {{ config('customize-dashboard-widget.customize_dashboard_title', 'Customize My Dashboard') }}
                 </x-filament::button>
 
                 <x-filament::button
@@ -95,9 +95,9 @@
         </div>
 
         <div>
-            <div class="p-4 bg-white dark:bg-gray-800 mb-4 space-y-3 rounded" x-show="editable">
+            <div class="available-widgets-section space-y-3" x-show="editable">
               <div>
-                <span class="font-medium text-lg">{{ __('Available Widgets') }}</span>
+                <span class="available-widgets-title font-medium text-lg">{{ __('Available Widgets') }}</span>
               </div>
               <div class="grid grid-cols-4 gap-4">
                 @foreach ($this->permittedWidgets as $index => $widget)
@@ -158,7 +158,7 @@
                             @livewire($widget['name'], [], key($widget['name'] . '-'. auth()->id().time()))
                         </div>
 
-                        <span class="drag-handle cursor-grab absolute top-0 left-0 z-1 hover:ring-2 dark:ring-gray-500 ring-primary-500 dark:bg-white/10 bg-white/40 transition-all duration-450 ease-in-out rounded-xl w-full h-full" x-show="editable"></span>
+                        <span class="drag-handle" x-show="editable"></span>
                     </div>
                 @endif
             @endforeach
