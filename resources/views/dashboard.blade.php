@@ -99,12 +99,12 @@
               <div>
                 <span class="available-widgets-title font-medium text-lg">{{ __('Available Widgets') }}</span>
               </div>
-              <div class="grid grid-cols-4 gap-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
                 @foreach ($this->permittedWidgets as $index => $widget)
-                    <label class="inline-flex items-center cursor-pointer">
+                    <label class="flex items-center cursor-pointer w-full min-w-0 gap-3">
                         <input type="checkbox" wire:model="permittedWidgets.{{ $index }}.visible" class="sr-only peer" x-on:change="handleCheckboxChange(event,'{{ str_replace('\\', '\\\\', $widget['name']) }}')">
-                        <div class="relative min-w-11 w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary-600 dark:peer-checked:bg-primary-600"></div>
-                        <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300 select-none">{{ $widget['title'] }}</span>
+                        <div class="relative flex-shrink-0 min-w-11 w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary-600 dark:peer-checked:bg-primary-600"></div>
+                        <span class="text-sm font-medium text-gray-900 dark:text-gray-300 select-none break-words flex-1">{{ $widget['title'] }}</span>
                     </label>
                 @endforeach
               </div>
