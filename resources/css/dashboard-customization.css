@@ -2,7 +2,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 .available-widgets-section {
-    @apply p-6 bg-white border border-gray-300 rounded-lg mb-6;
+    @apply p-4 bg-white border border-gray-300 rounded-lg mb-6;
 
     .dark & {
         @apply bg-white/10 border-gray-700;
