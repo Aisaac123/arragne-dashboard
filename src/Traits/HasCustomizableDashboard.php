@@ -274,14 +274,19 @@ trait HasCustomizableDashboard
 
             // Get widget title/heading safely
             $title = class_basename($widget);
-            if (method_exists($resolvedWidget, 'getHeading')) {
-                $title = $resolvedWidget->getHeading() ?? $title;
-            } elseif (method_exists($resolvedWidget, 'getLabel')) {
-                $title = $resolvedWidget->getLabel() ?? $title;
-            } elseif (property_exists($resolvedWidget, 'heading')) {
-                $title = $resolvedWidget->heading ?? $title;
-            } elseif (property_exists($resolvedWidget, 'label')) {
-                $title = $resolvedWidget->label ?? $title;
+            
+            foreach (['getHeading', 'getLabel'] as $method) {
+                if (method_exists($resolvedWidget, $method)) {
+                    try {
+                        $value = $resolvedWidget->$method();
+                        if ($value !== null && $value !== '') {
+                            $title = $value;
+                            break;
+                        }
+                    } catch (\Throwable $e) {
+                        continue;
+                    }
+                }
             }
 
             return [
