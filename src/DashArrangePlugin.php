@@ -1,22 +1,36 @@
 <?php
 
-namespace Shreejan\CustomizeDashboardWidget;
+namespace Shreejan\DashArrange;
 
 use Filament\Contracts\Plugin;
 use Filament\Panel;
 
-class CustomizeDashboardWidgetPlugin implements Plugin
+/**
+ * DashArrange Plugin.
+ *
+ * Filament plugin for customizable dashboard widgets.
+ */
+class DashArrangePlugin implements Plugin
 {
+    /**
+     * Get the plugin ID.
+     */
     public function getId(): string
     {
-        return 'customize-dashboard-widget';
+        return 'dash-arrange';
     }
 
+    /**
+     * Create a new plugin instance.
+     */
     public static function make(): static
     {
         return app(static::class);
     }
 
+    /**
+     * Get the plugin instance from Filament.
+     */
     public static function get(): static
     {
         /** @var static $plugin */
@@ -25,13 +39,20 @@ class CustomizeDashboardWidgetPlugin implements Plugin
         return $plugin;
     }
 
+    /**
+     * Register the plugin.
+     */
     public function register(Panel $panel): void
     {
         //
     }
 
+    /**
+     * Boot the plugin.
+     */
     public function boot(Panel $panel): void
     {
         //
     }
 }
+

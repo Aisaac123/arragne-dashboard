@@ -2,21 +2,20 @@
 
 namespace App\Filament\Pages;
 
-use Shreejan\CustomizeDashboardWidget\Traits\HasCustomizableDashboard;
+use Shreejan\DashArrange\Traits\HasDashArrange;
 use Filament\Pages\Dashboard as BaseDashboard;
 use Illuminate\Contracts\Support\Htmlable;
 
 class Dashboard extends BaseDashboard
 {
-    use HasCustomizableDashboard;
+    use HasDashArrange;
 
-    protected string $view = 'customize-dashboard-widget::dashboard';
+    protected string $view = 'dash-arrange::dashboard';
 
     public function mount(): void
     {
-        
-        // Initialize customizable dashboard functionality
-        $this->mountHasCustomizableDashboard();
+        // Initialize DashArrange functionality
+        $this->mountHasDashArrange();
     }
 
     public function getTitle(): string|Htmlable

@@ -1,7 +1,7 @@
 {
-    "name": "shreejan/customize-dashboard-widget",
+    "name": "shreejan/dash-arrange",
     "version": "1.0.0",
-    "description": "A Filament plugin for customizable dashboard widgets with drag & drop",
+    "description": "A Filament plugin for customizable dashboard widgets with drag & drop functionality",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -18,16 +18,21 @@
     },
     "autoload": {
         "psr-4": {
-            "Shreejan\\CustomizeDashboardWidget\\": "src/"
+            "Shreejan\\DashArrange\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Shreejan\\CustomizeDashboardWidget\\CustomizeDashboardWidgetServiceProvider"
+                "Shreejan\\DashArrange\\DashArrangeServiceProvider"
             ]
         }
     },
+    "support": {
+        "issues": "https://github.com/shreejanpandit/arragne-dashboard/issues",
+        "source": "https://github.com/shreejanpandit/arragne-dashboard"
+    },
+    "homepage": "https://github.com/shreejanpandit/arragne-dashboard",
     "minimum-stability": "dev",
     "prefer-stable": true
 }

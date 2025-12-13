@@ -70,7 +70,6 @@ return [
         'handle' => '[x-sortable-handle]',
     ],
 
-
     /*
     |--------------------------------------------------------------------------
     | Customize My Dashboard Button
@@ -83,3 +82,4 @@ return [
     'customize_dashboard_title' => 'Customize My Dashboard',
     'customize_dashboard_button_color' => 'primary',
 ];
+

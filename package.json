@@ -1,14 +1,14 @@
 {
-    "name": "dashboard-customization",
+    "name": "dash-arrange",
     "version": "1.0.0",
-    "description": "Package that allows user to customize their dashboard widget according to user preference.",
-    "homepage": "https://github.com/shreejanpandit/dashboard-customization#readme",
+    "description": "A Filament plugin for customizable dashboard widgets with drag & drop functionality",
+    "homepage": "https://github.com/shreejanpandit/arragne-dashboard#readme",
     "bugs": {
-        "url": "https://github.com/shreejanpandit/dashboard-customization/issues"
+        "url": "https://github.com/shreejanpandit/arragne-dashboard/issues"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/shreejanpandit/dashboard-customization.git"
+        "url": "git+https://github.com/shreejanpandit/arragne-dashboard.git"
     },
     "license": "ISC",
     "author": "",

@@ -27,8 +27,8 @@
                     let container = document.querySelector('#sortable-container');
                     if (container && !this.sortableInstance) {
                         this.sortableInstance = Sortable.create(container, {
-                            animation: {{ config('customize-dashboard-widget.sortable_options.animation', 150) }},
-                            handle: '{{ config('customize-dashboard-widget.sortable_options.handle', '[x-sortable-handle]') }}',
+                            animation: {{ config('dash-arrange.sortable_options.animation', 150) }},
+                            handle: '{{ config('dash-arrange.sortable_options.handle', '[x-sortable-handle]') }}',
                         });
                     }
                 });
@@ -66,12 +66,12 @@
             </div>
             <div class="flex items-center gap-2 ml-auto">
                 <x-filament::button
-                    color="{{ config('customize-dashboard-widget.customize_dashboard_button_color', 'primary') }}"
+                    color="{{ config('dash-arrange.customize_dashboard_button_color', 'primary') }}"
                     x-show="!editable"
                     x-on:click="customizeDashboard()"
                     size="sm"
                 >
-                    {{ config('customize-dashboard-widget.customize_dashboard_title', 'Customize My Dashboard') }}
+                    {{ config('dash-arrange.customize_dashboard_title', 'Customize My Dashboard') }}
                 </x-filament::button>
 
                 <x-filament::button
