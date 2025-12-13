@@ -21,6 +21,11 @@ Run the install command which will automatically:
 ```bash
 php artisan dash-arrange:install
 ```
+Make sure your `app/Providers/Filament/AdminPanelProvider.php` uses the correct Dashboard class:
+
+```php
+use App\Filament\Pages\Dashboard; // Instead of Filament\Pages\Dashboard
+```
 
 That's it! The package is now ready to use.
 
