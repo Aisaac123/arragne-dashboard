@@ -1,18 +1,18 @@
 <?php
 
-namespace Shreejan\DashArrange\Traits;
+namespace App\Traits;
 
 use Closure;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Auth;
-use Shreejan\DashArrange\Models\UserWidgetPreference;
+use App\Models\UserWidgetPreference;
 use Throwable;
 
 /**
  * Trait for customizable dashboard functionality.
  *
  * Provides drag-and-drop widget arrangement, visibility toggling,
- * and user preference persistence.
+ * and user preference persistence. Works in any Filament page.
  */
 trait HasDashArrange
 {
@@ -53,6 +53,53 @@ trait HasDashArrange
     private const WIDGET_TITLE_METHODS = ['getHeading', 'getLabel'];
 
     /**
+     * Get the scope for this page (unique identifier).
+     * Override this method to customize the scope.
+     *
+     * @return string
+     */
+    protected function getWidgetScope(): string
+    {
+        // Por defecto usa el nombre de la clase de la página
+        return static::class;
+    }
+
+    /**
+     * Get the widget method name to use.
+     * Override to use getHeaderWidgets(), getFooterWidgets(), etc.
+     *
+     * @return string
+     */
+    protected function getWidgetMethodName(): string
+    {
+        return 'getWidgets';
+    }
+
+    /**
+     * Get widgets from the page.
+     * Maneja automáticamente si el método existe o no.
+     *
+     * @return array<string>
+     */
+    private function getPageWidgets(): array
+    {
+        $methodName = $this->getWidgetMethodName();
+
+        if (!method_exists($this, $methodName)) {
+            return [];
+        }
+
+        try {
+            $widgets = $this->$methodName();
+            return is_array($widgets) ? $widgets : [];
+        } catch (Throwable $e) {
+            return [];
+        }
+    }
+
+
+
+    /**
      * Initialize widget arrays on mount.
      */
     public function mountHasDashArrange(): void
@@ -86,8 +133,10 @@ trait HasDashArrange
             return;
         }
 
-        $this->updateVisibleWidgets($sortedWidgets, $userId);
-        $this->hideRemovedWidgets($sortedWidgets, $userId);
+        $scope = $this->getWidgetScope();
+
+        $this->updateVisibleWidgets($sortedWidgets, $userId, $scope);
+        $this->hideRemovedWidgets($sortedWidgets, $userId, $scope);
         $this->refreshWidgetData();
         $this->notifySuccess();
     }
@@ -190,7 +239,7 @@ trait HasDashArrange
     {
         $permissionCheck = $this->getPermissionCheckClosure();
 
-        return collect($this->getWidgets())
+        return collect($this->getPageWidgets())
             ->filter(fn (string $widgetClass) => $this->isWidgetPermitted($widgetClass, $permissionCheck))
             ->map($this->widgetDataMapper())
             ->filter()
@@ -211,10 +260,11 @@ trait HasDashArrange
             return [];
         }
 
-        $preferences = $this->getUserPreferences($userId);
+        $scope = $this->getWidgetScope();
+        $preferences = $this->getUserPreferences($userId, $scope);
         $hasPreferences = ! empty($preferences['all']);
 
-        return collect($this->getWidgets())
+        return collect($this->getPageWidgets())
             ->filter(fn (string $widgetClass) => $this->shouldIncludeWidget($widgetClass, $preferences, $hasPreferences))
             ->sortBy(fn (string $widgetClass) => $this->getWidgetSortOrder($widgetClass, $preferences['visible']))
             ->map($this->widgetDataMapper(! $hasPreferences))
@@ -259,14 +309,16 @@ trait HasDashArrange
      *
      * @param  array<string>  $sortedWidgets  Widget class names in desired order
      * @param  int  $userId  User ID
+     * @param  string  $scope  Page scope
      */
-    private function updateVisibleWidgets(array $sortedWidgets, int $userId): void
+    private function updateVisibleWidgets(array $sortedWidgets, int $userId, string $scope): void
     {
         foreach ($sortedWidgets as $index => $widgetName) {
             UserWidgetPreference::updateOrCreate(
                 [
                     'user_id' => $userId,
                     'widget_name' => $widgetName,
+                    'scope' => $scope,
                 ],
                 [
                     'order' => $index + 1,
@@ -281,8 +333,9 @@ trait HasDashArrange
      *
      * @param  array<string>  $sortedWidgets  Currently visible widget class names
      * @param  int  $userId  User ID
+     * @param  string  $scope  Page scope
      */
-    private function hideRemovedWidgets(array $sortedWidgets, int $userId): void
+    private function hideRemovedWidgets(array $sortedWidgets, int $userId, string $scope): void
     {
         $removedWidgetNames = $this->getRemovedWidgetNames($sortedWidgets);
 
@@ -291,6 +344,7 @@ trait HasDashArrange
         }
 
         UserWidgetPreference::where('user_id', $userId)
+            ->where('scope', $scope)
             ->whereIn('widget_name', $removedWidgetNames)
             ->update(['show_widget' => false]);
     }
@@ -415,15 +469,18 @@ trait HasDashArrange
      * Get user preferences from database.
      *
      * @param  int  $userId  User ID
+     * @param  string  $scope  Page scope
      * @return array{all: array<string, bool>, visible: array<string, int>}
      */
-    private function getUserPreferences(int $userId): array
+    private function getUserPreferences(int $userId, string $scope): array
     {
         $allPreferences = UserWidgetPreference::where('user_id', $userId)
+            ->where('scope', $scope)
             ->pluck('show_widget', 'widget_name')
             ->toArray();
 
         $visiblePreferences = UserWidgetPreference::where('user_id', $userId)
+            ->where('scope', $scope)
             ->where('show_widget', true)
             ->orderBy('order')
             ->pluck('order', 'widget_name')
@@ -497,7 +554,10 @@ trait HasDashArrange
             return false;
         }
 
+        $scope = $this->getWidgetScope();
+
         $preference = UserWidgetPreference::where('user_id', $userId)
+            ->where('scope', $scope)
             ->where('widget_name', get_class($resolvedWidget))
             ->first();
 
@@ -597,5 +657,3 @@ trait HasDashArrange
         );
     }
 }
-
-

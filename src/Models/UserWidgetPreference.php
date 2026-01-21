@@ -1,6 +1,6 @@
 <?php
 
-namespace Shreejan\DashArrange\Models;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -25,6 +25,7 @@ class UserWidgetPreference extends Model
         'widget_name',
         'order',
         'show_widget',
+        'scope',
     ];
 
     /**
