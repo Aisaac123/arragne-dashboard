@@ -80,6 +80,7 @@ return [
     |
     */
     'customize_dashboard_title' => 'Customize My Dashboard',
+    'customize_customization_title' => 'Available Widgets',
     'customize_dashboard_button_color' => 'primary',
 ];
 

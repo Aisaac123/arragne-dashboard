@@ -109,7 +109,7 @@
     <div>
         <div class="available-widgets-section space-y-3" x-show="editable">
             <div>
-                <span class="available-widgets-title font-medium text-lg">{{ __('Available Widgets') }}</span>
+                <span class="available-widgets-title font-medium text-lg">{{ __(config('customize_customization_title', 'Widgets') ) }}</span>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
                 @foreach ($permittedWidgets as $index => $widget)
