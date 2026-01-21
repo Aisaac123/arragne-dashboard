@@ -5,7 +5,7 @@ namespace Shreejan\DashArrange\Traits;
 use Closure;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Auth;
-use App\Models\UserWidgetPreference;
+use Shreejan\DashArrange\Models\UserWidgetPreference;
 use Throwable;
 
 /**
