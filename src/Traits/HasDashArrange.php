@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Traits;
+namespace Shreejan\DashArrange\Traits;
 
 use Closure;
 use Filament\Notifications\Notification;
